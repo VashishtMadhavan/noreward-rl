@@ -11,7 +11,7 @@ parser.add_argument('-r', '--remotes', default=None,
                          'rewarders to use (e.g. -r vnc://localhost:5900+15900,vnc://localhost:5901+15901).')
 parser.add_argument('-e', '--env-id', type=str, default="doom",
                     help="Environment id")
-parser.add_argument('-l', '--log-dir', type=str, default="tmp/doom",
+parser.add_argument('-l', '--log-dir', type=str, default="debug",
                     help="Log directory path")
 parser.add_argument('-n', '--dry-run', action='store_true',
                     help="Print out commands rather than executing them")
@@ -21,7 +21,7 @@ parser.add_argument('--visualise', action='store_true',
                     help="Visualise the gym environment by running env.render() between each timestep")
 parser.add_argument('--envWrap', action='store_true',
                     help="Preprocess input in env_wrapper (no change in input size or network)")
-parser.add_argument('--designHead', type=str, default='universe',
+parser.add_argument('--designHead', type=str, default='nature',
                     help="Network deign head: nips or nature or doom or universe(default)")
 parser.add_argument('--unsup', type=str, default=None,
                     help="Unsup. exploration mode: action or state or stateAenc or None")

@@ -176,7 +176,7 @@ def create_atari_env(env_id, record=False, outdir=None, **_):
     if record and outdir is not None:
         env = gym.wrappers.Monitor(env, outdir, force=True)
     env = Vectorize(env)
-    env = AtariRescale42x42(env)
+    env = AtariRescale84x84(env)
     env = DiagnosticsInfo(env)
     env = Unvectorize(env)
     return env
@@ -285,6 +285,14 @@ def _process_frame42(frame):
     frame = np.reshape(frame, [42, 42, 1])
     return frame
 
+def _process_frame84(frame):
+    frame = frame.astype(np.float32)
+    frame *= (1.0 / 255.0)
+    frame = np.dot(frame[...,:3], [0.299, 0.587, 0.114])
+    frame = np.asarray(Image.fromarray(frame).resize((84, 84), resample=Image.BILINEAR))
+    frame = np.reshape(frame, [84, 84, 1])
+    return frame
+
 class AtariRescale42x42(vectorized.ObservationWrapper):
     def __init__(self, env=None):
         super(AtariRescale42x42, self).__init__(env)
@@ -292,6 +300,14 @@ class AtariRescale42x42(vectorized.ObservationWrapper):
 
     def _observation(self, observation_n):
         return [_process_frame42(observation) for observation in observation_n]
+
+class AtariRescale84x84(vectorized.ObservationWrapper):
+    def __init__(self, env=None):
+        super(AtariRescale84x84, self).__init__(env)
+        self.observation_space = Box(0.0, 1.0, [84, 84, 1])
+
+    def _observation(self, observation_n):
+        return [_process_frame84(observation) for observation in observation_n]
 
 class FixedKeyState(object):
     def __init__(self, keys):

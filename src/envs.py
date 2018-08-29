@@ -16,8 +16,18 @@ def create_env(env_id, client_id, remotes, **kwargs):
         return create_doom(env_id, client_id, **kwargs)
     if 'mario' in env_id.lower():
         return create_mario(env_id, client_id, **kwargs)
-    else:
+    if 'NoFrameskip' in env_id:
         return create_atari_env(env_id, **kwargs)
+    else:
+        return create_ple_env(env_id, **kwargs)
+
+def create_ple_env(env_id, record=False, outdir=None, **_):
+    env = gym.make(env_id)
+    env = atari_wrappers.MaxAndSkipEnv(env, skip=4)
+    env = atari_wrappers.WarpFrame(env)
+    env = atari_wrappers.ScaledFloatFrame(env)
+    env = atari_wrappers.FrameStack(env, k=4)
+    return env
 
 def create_atari_env(env_id, record=False, outdir=None, **_):
     env = atari_wrappers.make_atari(env_id)

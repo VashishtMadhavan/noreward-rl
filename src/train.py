@@ -4,7 +4,7 @@ import sys
 from six.moves import shlex_quote
 
 parser = argparse.ArgumentParser(description="Run commands")
-parser.add_argument('-w', '--num-workers', default=20, type=int,
+parser.add_argument('-w', '--num-workers', default=4, type=int,
                     help="Number of workers")
 parser.add_argument('-r', '--remotes', default=None,
                     help='The address of pre-existing VNC servers and '

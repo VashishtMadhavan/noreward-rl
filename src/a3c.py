@@ -205,6 +205,7 @@ def env_runner(env, policy, num_local_steps, summary_writer, render, predictor,
                 else:
                     print("Episode finished. Sum of shaped rewards: %.2f. Length: %d." % (rewards, length))
                 if 'distance' in info: print('Mario Distance Covered:', info['distance'])
+                reward_copy = float(rewards); length_copy = int(length)
                 length = 0
                 rewards = 0
                 terminal_end = True
@@ -221,6 +222,8 @@ def env_runner(env, policy, num_local_steps, summary_writer, render, predictor,
                     summary.value.add(tag=k, simple_value=float(v))
                 if terminal:
                     summary.value.add(tag='global/episode_value', simple_value=float(values))
+                    summary.value.add(tag='global/episode_rew', simple_value=float(reward_copy))
+                    summary.value.add(tag='global/episode_len', simple_value=float(length_copy))
                     values = 0
                     if predictor is not None:
                         summary.value.add(tag='global/episode_bonus', simple_value=float(ep_bonus))

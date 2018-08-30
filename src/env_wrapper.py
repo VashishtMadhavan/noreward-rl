@@ -46,7 +46,7 @@ class BufferedObsEnv(gym.ObservationWrapper):
 
     def step(self, action):
         obs, reward, done, info = self.env.step(action)
-        return self.observation(obs), reward, done, info
+        return self.observation(obs), float(reward), done, info
 
     def observation(self, obs):
         obs = self._convert(obs)
@@ -116,7 +116,7 @@ class SkipEnv(gym.Wrapper):
             info['steps'] = i + 1
             if done:
                 break
-        return obs, total_reward, done, info
+        return obs, float(total_reward), done, info
 
 
 class MarioEnv(gym.Wrapper):

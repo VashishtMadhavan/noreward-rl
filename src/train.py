@@ -21,7 +21,7 @@ parser.add_argument('--visualise', action='store_true',
                     help="Visualise the gym environment by running env.render() between each timestep")
 parser.add_argument('--envWrap', action='store_true',
                     help="Preprocess input in env_wrapper (no change in input size or network)")
-parser.add_argument('--designHead', type=str, default='nature',
+parser.add_argument('--designHead', type=str, default='universe',
                     help="Network deign head: nips or nature or doom or universe(default)")
 parser.add_argument('--unsup', type=str, default=None,
                     help="Unsup. exploration mode: action or state or stateAenc or None")

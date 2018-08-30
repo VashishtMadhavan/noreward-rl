@@ -23,12 +23,8 @@ def create_env(env_id, client_id, remotes, **kwargs):
 
 def create_ple_env(env_id, record=False, outdir=None, **_):
     env = gym.make(env_id)
-    if record and outdir is not None:
-        env = gym.wrappers.Monitor(env, outdir, force=True)
-    env = atari_wrappers.MaxAndSkipEnv(env, skip=4)
-    env = atari_wrappers.WarpFrame(env)
-    env = atari_wrappers.ScaledFloatFrame(env)
-    env = atari_wrappers.FrameStack(env, k=4)
+    env = env_wrapper.BufferedObsEnv(env, skip=4, shape=(42,42))
+    env = env_wrapper.SkipEnv(env, skip=4)
     return env
 
 def create_atari_env(env_id, record=False, outdir=None, **_):

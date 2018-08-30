@@ -44,11 +44,11 @@ class BufferedObsEnv(gym.ObservationWrapper):
         self.scale = 1.0 / 255
         self.observation_space.high[...] = 1.0
 
-    def _step(self, action):
+    def step(self, action):
         obs, reward, done, info = self.env.step(action)
-        return self._observation(obs), reward, done, info
+        return self.observation(obs), reward, done, info
 
-    def _observation(self, obs):
+    def observation(self, obs):
         obs = self._convert(obs)
         self.counter += 1
         if self.counter % self.skip == 0:
@@ -56,7 +56,7 @@ class BufferedObsEnv(gym.ObservationWrapper):
         obsNew = np.stack(self.buffer, axis=self.ch_axis)
         return obsNew.astype(np.float32) * self.scale
 
-    def _reset(self):
+    def reset(self):
         """Clear buffer and re-fill by duplicating the first observation."""
         self.obs_buffer.clear()
         obs = self._convert(self.env.reset())
@@ -108,7 +108,7 @@ class SkipEnv(gym.Wrapper):
         super(SkipEnv, self).__init__(env)
         self.skip = skip
 
-    def _step(self, action):
+    def step(self, action):
         total_reward = 0
         for i in range(0, self.skip):
             obs, reward, done, info = self.env.step(action)

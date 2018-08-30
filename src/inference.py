@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from __future__ import print_function
-import go_vncdriver
 import tensorflow as tf
 import numpy as np
 import argparse
@@ -11,8 +10,6 @@ from envs import create_env
 from worker import FastSaver
 from model import LSTMPolicy
 import utils
-import distutils.version
-use_tf12_api = distutils.version.LooseVersion(tf.VERSION) >= distutils.version.LooseVersion('0.12.0')
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -48,12 +45,8 @@ def inference(args):
                                                trainable=False)
 
         # Variable names that start with "local" are not saved in checkpoints.
-        if use_tf12_api:
-            variables_to_restore = [v for v in tf.global_variables() if not v.name.startswith("local")]
-            init_all_op = tf.global_variables_initializer()
-        else:
-            variables_to_restore = [v for v in tf.all_variables() if not v.name.startswith("local")]
-            init_all_op = tf.initialize_all_variables()
+        variables_to_restore = [v for v in tf.global_variables() if not v.name.startswith("local")]
+        init_all_op = tf.global_variables_initializer()
         saver = FastSaver(variables_to_restore)
 
         # print trainable variables
@@ -64,14 +57,10 @@ def inference(args):
 
         # summary of rewards
         action_writers = []
-        if use_tf12_api:
-            summary_writer = tf.summary.FileWriter(outdir)
-            for ac_id in range(numaction):
-                action_writers.append(tf.summary.FileWriter(os.path.join(outdir,'action_{}'.format(ac_id))))
-        else:
-            summary_writer = tf.train.SummaryWriter(outdir)
-            for ac_id in range(numaction):
-                action_writers.append(tf.train.SummaryWriter(os.path.join(outdir,'action_{}'.format(ac_id))))
+        summary_writer = tf.summary.FileWriter(outdir)
+        for ac_id in range(numaction):
+            action_writers.append(tf.summary.FileWriter(os.path.join(outdir,'action_{}'.format(ac_id))))
+        
         logger.info("Inference events directory: %s", outdir)
 
         config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=False)
@@ -177,7 +166,7 @@ def inference(args):
 
 def main(_):
     parser = argparse.ArgumentParser(description=None)
-    parser.add_argument('--log-dir', default="tmp/doom", help='input model directory')
+    parser.add_argument('--log-dir', default="debug/", help='input model directory')
     parser.add_argument('--out-dir', default=None, help='output log directory. Default: log_dir/inference/')
     parser.add_argument('--env-id', default="PongDeterministic-v3", help='Environment id')
     parser.add_argument('--record', action='store_true',

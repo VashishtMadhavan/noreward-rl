@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from __future__ import print_function
-import go_vncdriver
 import tensorflow as tf
 import numpy as np
 import argparse
@@ -11,7 +10,6 @@ from envs import create_env
 from worker import FastSaver
 from model import LSTMPolicy
 import utils
-import distutils.version
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -167,7 +165,7 @@ def inference(args):
 
 def main(_):
     parser = argparse.ArgumentParser(description=None)
-    parser.add_argument('--log-dir', default="tmp/doom", help='input model directory')
+    parser.add_argument('--log-dir', default="debug/", help='input model directory')
     parser.add_argument('--out-dir', default=None, help='output log directory. Default: log_dir/inference/')
     parser.add_argument('--env-id', default="PongDeterministic-v3", help='Environment id')
     parser.add_argument('--record', action='store_true',

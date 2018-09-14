@@ -10,7 +10,7 @@ constants = {
                     # smaller than 20 makes the algorithm more difficult to tune and to get to work.
 'GRAD_NORM_CLIP': 40.0,   # gradient norm clipping
 'REWARD_CLIP': 1.0,       # reward value clipping in [-x,x]
-'MAX_GLOBAL_STEPS': 100000000,  # total steps taken across all workers
+'MAX_GLOBAL_STEPS': 10000000,  # total steps taken across all workers
 'LEARNING_RATE': 1e-4,  # learning rate for adam
 
 'PREDICTION_BETA': 0.01,  # weight of prediction bonus

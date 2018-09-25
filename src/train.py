@@ -4,14 +4,14 @@ import sys
 from six.moves import shlex_quote
 
 parser = argparse.ArgumentParser(description="Run commands")
-parser.add_argument('-w', '--num-workers', default=4, type=int,
+parser.add_argument('-w', '--num-workers', default=20, type=int,
                     help="Number of workers")
 parser.add_argument('-r', '--remotes', default=None,
                     help='The address of pre-existing VNC servers and '
                          'rewarders to use (e.g. -r vnc://localhost:5900+15900,vnc://localhost:5901+15901).')
 parser.add_argument('-e', '--env-id', type=str, default="doom",
                     help="Environment id")
-parser.add_argument('-l', '--log-dir', type=str, default="debug",
+parser.add_argument('-l', '--log-dir', type=str, default="originalGame_run1",
                     help="Log directory path")
 parser.add_argument('-n', '--dry-run', action='store_true',
                     help="Print out commands rather than executing them")
@@ -125,6 +125,7 @@ def create_commands(session, num_workers, remotes, env_id, logdir, shell='bash',
         cmds += ["sleep 1"]
     for window, cmd in cmds_map:
         cmds += [cmd]
+    cmds += ['tmux attach -t {}'.format(session)]
 
     return cmds, notes
 

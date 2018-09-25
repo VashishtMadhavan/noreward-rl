@@ -39,7 +39,7 @@ def run(args, server):
     variables_to_save = [v for v in tf.global_variables() if not v.name.startswith("local")]
     init_op = tf.variables_initializer(variables_to_save)
     init_all_op = tf.global_variables_initializer()
-    saver = FastSaver(variables_to_save)
+    saver = FastSaver(variables_to_save, max_to_keep=50)
     if args.pretrain is not None:
         variables_to_restore = [v for v in tf.trainable_variables() if not v.name.startswith("local")]
         pretrain_saver = FastSaver(variables_to_restore)
@@ -74,7 +74,7 @@ def run(args, server):
                              summary_writer=summary_writer,
                              ready_op=tf.report_uninitialized_variables(variables_to_save),
                              global_step=trainer.global_step,
-                             save_model_secs=30,
+                             save_model_secs=600,
                              save_summaries_secs=30)
 
     num_global_steps = constants['MAX_GLOBAL_STEPS']
